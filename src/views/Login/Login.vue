@@ -12,13 +12,13 @@
         class="container__input__username container__input__item"
         type="text"
         placeholder="请输入手机号"
-        v-model="data.userName"
+        v-model="phone"
       />
       <input
         class="container__input__password container__input__item"
         type="password"
         placeholder="请输入密码"
-        v-model="data.password"
+        v-model="password"
       />
     </div>
     <div class="container__button">
@@ -37,51 +37,88 @@
       <a href="javascript:;" class="container__content__a">忘记密码</a>
     </div>
   </div>
+  <Toast v-if="isShow" :message="toastMessage" />
 </template>
 
 <script>
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
+import { reactive, toRefs } from "vue";
+import { post } from "../../unils/request";
+import Toast, { showToastEffect } from "../../components/Toast.vue";
 import axios from "axios";
 axios.defaults.headers.post["Content-Type"] = "application/json";
+
+const userLoginEffect = (showToast) => {
+  //定义数据
+  const data = reactive({
+    phone: "",
+    password: "",
+  });
+  const router = useRouter();
+  //点击登录，跳转到首页
+  const handleLogin = async () => {
+    //判断input里内容不能为空
+    if (data.phone === "") {
+      showToast("手机号不能为空");
+      return;
+    }
+    if (data.password === "") {
+      showToast("密码不能为空");
+      return;
+    }
+    //调用接口
+    try {
+      const result = await post("/user/login", {
+        phone: "data.userName",
+        password: "data.password",
+      });
+      if (result.data.code === "0000") {
+        localStorage.setItem("isLogin", "true");
+        router.push({ name: "Home" });
+      } else {
+        showToast("登陆失败");
+        console.log(result.data.desc);
+      }
+    } catch (err) {
+      showToast("发送请求失败！");
+      console.log(err);
+    }
+  };
+  // 返回数据
+  const { phone, password } = toRefs(data);
+  return {
+    phone,
+    password,
+    handleLogin,
+  };
+};
+const userRegisterEffect = () => {
+  const router = useRouter();
+  //点击注册，跳转到注册页面
+  const handleRegister = () => {
+    router.push({ name: "Register" });
+  };
+  return { handleRegister };
+};
+
 export default {
   name: "Login",
+  components: { Toast },
   setup() {
-    const data = reactive({
-      userName: "",
-      password: "",
-    });
-    const router = useRouter();
-    //点击登录，跳转到首页
-    const handleLogin = () => {
-      axios
-        .post(
-          "https://www.fastmock.site/mock/f0e8ab5c5c19862e24bf5456d3cfca8f/api/user/login",
-          {
-            phone: "data.userName",
-            password: "data.password",
-          }
-        )
-        .then((response) => {
-          if (response.data.code === "0000") {
-            localStorage.setItem("isLogin", "true");
-            router.push({ name: "Home" });
-          } else {
-            alert(response.data.desc);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      // localStorage.setItem("isLogin", "true");
-      // router.push({ name: "Home" });
+    //对提示框的解构
+    const { isShow, toastMessage, showToast } = showToastEffect();
+    //对数据进行解构
+    const { phone, password, handleLogin } = userLoginEffect(showToast);
+    //对跳转到注册页面进行解构
+    const { handleRegister } = userRegisterEffect();
+    return {
+      handleLogin,
+      handleRegister,
+      phone,
+      password,
+      isShow,
+      toastMessage,
     };
-    //点击注册，跳转到注册页面
-    const handleRegister = () => {
-      router.push({ name: "Register" });
-      console.log(1);
-    };
-    return { handleLogin, handleRegister, data };
   },
 };
 </script>

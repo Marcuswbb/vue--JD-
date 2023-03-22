@@ -12,20 +12,23 @@
         class="container__input__username container__input__item"
         type="text"
         placeholder="请输入手机号"
+        :v-model="phone"
       />
       <input
         class="container__input__password container__input__item"
         type="password"
         placeholder="请输入密码"
+        :v-model="password"
       />
       <input
         class="container__input__password container__input__item"
         type="password"
         placeholder="确认密码"
+        v-model="confirmPassword"
       />
     </div>
     <div class="container__button">
-      <button class="container__button__login" @click="handleLogin">
+      <button class="container__button__login" @click="handleRegister">
         注册
       </button>
     </div>
@@ -35,18 +38,99 @@
       >
     </div>
   </div>
+  <Toast v-if="isShow" :message="toastMessage" />
 </template>
 
 <script>
 import { useRouter } from "vue-router";
+import { reactive, toRefs } from "vue";
+import { post } from "../../unils/request";
+import Toast, { showToastEffect } from "../../components/Toast.vue";
+
+const userRegisterEffect = (showToast) => {
+  //定义数据
+  const data = reactive({
+    phone: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const router = useRouter();
+  //点击注册，跳转到首页
+  const handleRegister = async () => {
+    //判断input里内容不能为空
+    if (data.phone === "") {
+      showToast("手机号不能为空");
+      return;
+    }
+    if (data.password === "") {
+      showToast("密码不能为空");
+      return;
+    }
+    if (data.confirmPassword === "") {
+      showToast("密码不能为空");
+      return;
+    }
+    //判断2次输入的密码一不一致
+    if (data.password !== data.confirmPassword) {
+      showToast("密码不一致");
+    } else {
+      //调用接口
+      try {
+        const result = await post("/user/register", {
+          phone: "data.phone",
+          password: "data.password",
+        });
+        if (result.data.code === "0000") {
+          localStorage.setItem("isLogin", "true");
+          router.push({ name: "Home" });
+        } else {
+          showToast("注册失败");
+          console.log(result.data.desc);
+        }
+      } catch (err) {
+        showToast("发送请求失败！");
+        console.log(err);
+      }
+    }
+  };
+  // 返回数据
+  const { phone, password, confirmPassword } = toRefs(data);
+  return {
+    phone,
+    password,
+    confirmPassword,
+    handleRegister,
+  };
+};
+//跳转到登录页面
+const userLoginEffect = () => {
+  const router = useRouter();
+  //跳转到登录页面
+  const handleLogin = () => {
+    router.push({ name: "Login" });
+  };
+  return { handleLogin };
+};
 export default {
-  name: "Login",
+  name: "Register",
+  components: { Toast },
   setup() {
-    const router = useRouter();
-    const handleLogin = () => {
-      router.push({ name: "Login" });
+    //对提示框的解构
+    const { isShow, toastMessage, showToast } = showToastEffect();
+    //
+    const { phone, password, confirmPassword, handleRegister } =
+      userRegisterEffect(showToast);
+    //
+    const { handleLogin } = userLoginEffect();
+    return {
+      isShow,
+      toastMessage,
+      phone,
+      password,
+      confirmPassword,
+      handleRegister,
+      handleLogin,
     };
-    return { handleLogin };
   },
 };
 </script>
