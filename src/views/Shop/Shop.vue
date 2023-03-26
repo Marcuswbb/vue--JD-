@@ -22,6 +22,7 @@
     <!-- 防止裂图  v-if="item.imgUrl" -->
     <ShopInfo :item="item" :showBorder="false" v-if="item.imgUrl" />
     <Content />
+    <Cart />
   </div>
 </template>
 <script>
@@ -30,6 +31,7 @@ import { get } from "../../unils/request.js";
 import { useRouter, useRoute } from "vue-router";
 import ShopInfo from "../../components/ShopInfo.vue";
 import Content from "../Shop/Content.vue";
+import Cart from "./Cart.vue";
 
 const userShopInfoEffect = () => {
   //route 路由信息对象，只读对象
@@ -56,7 +58,7 @@ const userHandelBackClick = () => {
 };
 export default {
   name: "Shop",
-  components: { ShopInfo, Content },
+  components: { ShopInfo, Content, Cart },
   setup() {
     const { item, getItemData } = userShopInfoEffect();
     const handelBackClick = userHandelBackClick();

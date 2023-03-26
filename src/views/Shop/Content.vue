@@ -45,15 +45,21 @@
             </div>
             <div class="content__right__item__right__bottom__count">
               <span
+                v-show="cartData?.[shopId]?.[item.id]?.['count']"
                 class="content__right__item__right__bottom__count__minus-iconfont"
+                @click="addItemToCart(shopId, item.id, item, -1)"
               >
                 &#xe8a7;
               </span>
-              <span class="content__right__item__right__bottom__count__number">
-                88
+              <span
+                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                class="content__right__item__right__bottom__count__number"
+              >
+                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
               </span>
               <span
                 class="content__right__item__right__bottom__count__plus-iconfont"
+                @click="addItemToCart(shopId, item.id, item, 1)"
               >
                 &#xe8a6;
               </span>
@@ -65,9 +71,11 @@
   </div>
 </template>
 <script>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { get } from "../../unils/request";
+import { useStore } from "vuex";
+
 //商品详情的数据
 const leftItems = [
   {
@@ -99,7 +107,6 @@ const leftItems = [
 const userHandleClickName = () => {
   // 定义一个空变量来保存name
   const currentItemName = ref("all");
-
   const handleClickName = (itemName) => {
     currentItemName.value = itemName;
   };
@@ -111,22 +118,39 @@ const userContentEffect = (currentItemName) => {
   const route = useRoute();
   const shopId = route.params.id;
   const getContentData = async (shopId, shopTab) => {
-    const result = await get(`/shop/${shopId}/tab/${shopTab} `);
+    const result = await get(`/shop/${shopId}/tab/${shopTab}`);
     rightItems.value = result.data.data;
   };
   watchEffect(() => {
     getContentData(shopId, currentItemName.value);
   });
-
-  return { rightItems };
+  return { rightItems, shopId };
+};
+//购买商品的数量
+const useCartEffect = () => {
+  const store = useStore();
+  const { cartData } = toRefs(store.state);
+  const addItemToCart = (shopId, itemId, itemInfo, num) => {
+    store.commit("addItemToCart", { shopId, itemId, itemInfo, num });
+  };
+  return { cartData, addItemToCart };
 };
 export default {
   name: "Content",
   setup() {
+    const { cartData, addItemToCart } = useCartEffect();
     const { currentItemName, handleClickName } = userHandleClickName();
-    const { rightItems } = userContentEffect(currentItemName);
+    const { rightItems, shopId } = userContentEffect(currentItemName);
     // 抛出
-    return { leftItems, handleClickName, currentItemName, rightItems };
+    return {
+      leftItems,
+      handleClickName,
+      currentItemName,
+      rightItems,
+      cartData,
+      shopId,
+      addItemToCart,
+    };
   },
 };
 </script>
