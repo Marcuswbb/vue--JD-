@@ -47,7 +47,7 @@
               <span
                 v-show="cartData?.[shopId]?.[item.id]?.['count']"
                 class="content__right__item__right__bottom__count__minus-iconfont"
-                @click="addItemToCart(shopId, item.id, item, -1)"
+                @click="changeItemToCart(shopId, item.id, item, -1)"
               >
                 &#xe8a7;
               </span>
@@ -59,7 +59,7 @@
               </span>
               <span
                 class="content__right__item__right__bottom__count__plus-iconfont"
-                @click="addItemToCart(shopId, item.id, item, 1)"
+                @click="changeItemToCart(shopId, item.id, item, 1)"
               >
                 &#xe8a6;
               </span>
@@ -74,7 +74,7 @@
 import { ref, watchEffect, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { get } from "../../unils/request";
-import { useStore } from "vuex";
+import {useCommonCartEffect} from "./commonCartEffect.js";
 
 //商品详情的数据
 const leftItems = [
@@ -126,19 +126,11 @@ const userContentEffect = (currentItemName) => {
   });
   return { rightItems, shopId };
 };
-//购买商品的数量
-const useCartEffect = () => {
-  const store = useStore();
-  const { cartData } = toRefs(store.state);
-  const addItemToCart = (shopId, itemId, itemInfo, num) => {
-    store.commit("addItemToCart", { shopId, itemId, itemInfo, num });
-  };
-  return { cartData, addItemToCart };
-};
+
 export default {
   name: "Content",
   setup() {
-    const { cartData, addItemToCart } = useCartEffect();
+    const { cartData, changeItemToCart } = useCommonCartEffect();
     const { currentItemName, handleClickName } = userHandleClickName();
     const { rightItems, shopId } = userContentEffect(currentItemName);
     // 抛出
@@ -149,7 +141,7 @@ export default {
       rightItems,
       cartData,
       shopId,
-      addItemToCart,
+      changeItemToCart,
     };
   },
 };

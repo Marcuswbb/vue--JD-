@@ -21,7 +21,7 @@ export default createStore({
   },
   getters: {},
   mutations: {
-    addItemToCart(state, payload) {
+    changeItemToCart(state, payload) {
       //从Content传来state, payload，判断state有没有shopId，
       const { shopId, itemId, itemInfo, num } = payload
       //判断shopId是否为空
@@ -37,10 +37,22 @@ export default createStore({
       }
       //点击加号，把count加一
       item.count += num
-      //把item加到shopInfo中
-      shopInfo[itemId] = item
-      //把shopInfo加到cartData里
-      state.cartData[shopId] = shopInfo
+      //如果为空，就把商品从购物车里移除
+      if (item.count === 0) {
+        delete shopInfo[itemId]
+      } else {
+        //把item加到shopInfo中
+        shopInfo[itemId] = item
+      }
+
+      //判断商铺下购物车是否为空
+      if (JSON.stringify(shopInfo) !== '{}') {
+        //把shopInfo加到cartData里
+        state.cartData[shopId] = shopInfo
+      } else {
+        //清除商铺信息
+        delete state.cartData[shopId]
+      }
     }
   },
   actions: {},
