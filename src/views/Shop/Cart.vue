@@ -1,17 +1,79 @@
 <template>
+  <!-- 购物车蒙层 -->
+  <div class="mask" v-if="cartShow && JSON.stringify(cartItems) !== '{}'"></div>
   <div class="cart">
-    <div class="cart__detail">
+    <!-- 头部, 全选 -->
+    <!-- JSON.stringify(cartItems) !== '{}' 判断购物车里商品是否为空，购物车没有商品就不显示购物车商品列表 -->
+    <div
+      class="cart__header"
+      v-if="cartShow && JSON.stringify(cartItems) !== '{}'"
+    >
+      <div class="cart__header__left">
+        <div
+          v-if="allChecked"
+          class="cart__header__left__checked-iconfont"
+          @click="
+            () => {
+              setAllChecked(shopId);
+            }
+          "
+        >
+          &#xe604;
+        </div>
+        <div
+          v-else
+          class="cart__header__left__unchecked-iconfont"
+          @click="
+            () => {
+              setAllChecked(shopId);
+            }
+          "
+        >
+          &#xe601;
+        </div>
+        <div class="cart__header__left__text">全选</div>
+      </div>
+      <div class="cart__header__right">
+        <div
+          class="cart__header__right__clear-cart"
+          @click="
+            () => {
+              clearCart(shopId);
+            }
+          "
+        >
+          清空购物车
+        </div>
+      </div>
+    </div>
+    <div
+      class="cart__detail"
+      v-if="cartShow && JSON.stringify(cartItems) !== '{}'"
+    >
       <div class="cart__detail__item" v-for="item of cartItems" :key="item.id">
         <div class="cart__detail__item__left">
           <!-- 选中/不选中 字体图标 -->
           <div
             v-if="item.checked"
             class="cart__detail__item__left__checked-iconfont"
+            @click="
+              () => {
+                changeItemChecked(shopId, item.id);
+              }
+            "
           >
-            &#xe618;
+            &#xe604;
           </div>
-          <div v-else class="cart__detail__item__left__unchecked-iconfont">
-            &#xe619;
+          <div
+            v-else
+            class="cart__detail__item__left__unchecked-iconfont"
+            @click="
+              () => {
+                changeItemChecked(shopId, item.id);
+              }
+            "
+          >
+            &#xe601;
           </div>
           <img
             :src="item.imgUrl"
@@ -64,7 +126,14 @@
         </div>
       </div>
     </div>
-    <div class="cart__count">
+    <div
+      class="cart__count"
+      @click="
+        () => {
+          handleCartShowChange(cartItems);
+        }
+      "
+    >
       <div class="cart__count__left">
         <div class="cart__count__left__icon">
           <img
@@ -86,7 +155,7 @@
   </div>
 </template>
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { useCommonCartEffect } from "./commonCartEffect.js";
@@ -118,29 +187,85 @@ const useCartEffect = () => {
     let sum = 0.0;
     if (itemList) {
       for (let key in itemList) {
-        sum += itemList[key].count * itemList[key].promotionPrice;
+        if (itemList[key].checked) {
+          sum += itemList[key].count * itemList[key].promotionPrice;
+        }
       }
     }
     return sum.toFixed(2);
   });
   //购物车列表
   const cartItems = computed(() => {
-    const cartItems = cartData[shopId] || [];
+    let cartShow = ref(false);
+    const cartItems = cartData[shopId] || {};
+    if (JSON.stringify(cartItems) === "{}") {
+      cartShow.value = false;
+    }
     return cartItems;
   });
+  //购物车勾选状态
+  const changeItemChecked = (shopId, itemId) => {
+    store.commit("changeItemChecked", { shopId, itemId });
+  };
+  //清除购物车内容
+  const clearCart = (shopId) => {
+    store.commit("clearCart", { shopId });
+  };
+  //购物车选项框全选
+  const allChecked = computed(() => {
+    const itemList = cartData[shopId];
+    let result = true;
+    if (itemList) {
+      for (let key in itemList) {
+        if (!itemList[key].checked) {
+          result = false;
+        }
+      }
+    }
+    return result;
+  });
+  //点击购物车全选框，改变全选状态
+  const setAllChecked = (shopId) => {
+    store.commit("setAllChecked", { shopId });
+  };
+
   return {
     total,
     sumPrice,
     cartItems,
     shopId,
+    changeItemChecked,
+    clearCart,
+    allChecked,
+    setAllChecked,
   };
 };
-
+//隐藏购物车
+const useCartShowEffect = () => {
+  //相当于一个开关
+  let cartShow = ref(false);
+  const handleCartShowChange = (cartItems) => {
+    if (JSON.stringify(cartItems) !== "{}") {
+      cartShow.value = !cartShow.value;
+    }
+  };
+  return { handleCartShowChange, cartShow };
+};
 export default {
   name: "Cart",
   setup() {
     const { changeItemToCart, cartData } = useCommonCartEffect();
-    const { total, sumPrice, cartItems, shopId } = useCartEffect();
+    const {
+      total,
+      sumPrice,
+      cartItems,
+      shopId,
+      changeItemChecked,
+      clearCart,
+      allChecked,
+      setAllChecked,
+    } = useCartEffect();
+    const { handleCartShowChange, cartShow } = useCartShowEffect();
     return {
       total,
       sumPrice,
@@ -148,15 +273,68 @@ export default {
       changeItemToCart,
       shopId,
       cartData,
+      changeItemChecked,
+      clearCart,
+      allChecked,
+      setAllChecked,
+      handleCartShowChange,
+      cartShow,
     };
   },
 };
 </script>
 <style lang="scss" scoped>
 // src\views\shop\Cart.vue
+.mask {
+  position: fixed;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 49rem;
+}
 .cart {
+  position: fixed;
+  background-color: #fff;
+  width: 375px;
+  left: 0;
+  bottom: 0;
+  &__header {
+    box-sizing: border-box;
+    padding: 0 18px;
+    width: 100%;
+    height: 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    &__left {
+      display: flex;
+      justify-content: center;
+      &__checked-iconfont,
+      &__unchecked-iconfont {
+        font-size: 20rem;
+        color: #0091ff;
+        margin-right: 8.4rem;
+      }
+      &__text {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #333333;
+        line-height: 20px;
+      }
+    }
+    &__right {
+      &__clear-cart {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #333333;
+        text-align: right;
+        line-height: 16px;
+      }
+    }
+  }
   &__detail {
-    position: fixed;
     background-color: #fff;
     width: 375rem;
     left: 0;
@@ -166,14 +344,24 @@ export default {
       display: flex;
       &__left {
         margin-right: 16rem;
+        display: flex;
+        justify-items: center;
+        align-items: center;
+        &__checked-iconfont,
+        &__unchecked-iconfont {
+          font-size: 20rem;
+          color: #0091ff;
+          margin-right: 20rem;
+        }
         &__image {
-          width: 68rem;
-          height: 68rem;
+          width: 46rem;
+          height: 46rem;
           margin-bottom: 12rem;
         }
       }
       &__right {
         flex-grow: 1;
+        margin-top: 16rem;
         &__top {
           font-size: 14rem;
           color: #333333;
@@ -229,7 +417,6 @@ export default {
   }
   &__count {
     box-shadow: 0 -1px 1px 0 #f1f1f1;
-    position: fixed;
     left: 0;
     right: 0;
     bottom: 0;

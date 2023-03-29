@@ -21,6 +21,7 @@ export default createStore({
   },
   getters: {},
   mutations: {
+    //购物车与商品列表数据同步
     changeItemToCart(state, payload) {
       //从Content传来state, payload，判断state有没有shopId，
       const { shopId, itemId, itemInfo, num } = payload
@@ -41,6 +42,8 @@ export default createStore({
       if (item.count === 0) {
         delete shopInfo[itemId]
       } else {
+        //把商品的勾选状态改为true
+        item.checked = true
         //把item加到shopInfo中
         shopInfo[itemId] = item
       }
@@ -52,6 +55,25 @@ export default createStore({
       } else {
         //清除商铺信息
         delete state.cartData[shopId]
+      }
+    },
+    //购物车勾选状态
+    changeItemChecked(state, payload) {
+      const { shopId, itemId } = payload
+      const item = state.cartData[shopId][itemId]
+      item.checked = !item.checked
+    },
+    //清空购物车
+    clearCart(state, payload) {
+      const { shopId } = payload
+      state.cartData[shopId] = {}
+    },
+    //点击购物车全选框，改变全选状态
+    setAllChecked(state, payload) {
+      const { shopId } = payload
+      let result = state.cartData[shopId]
+      for (let key in result) {
+        result[key].checked = true
       }
     }
   },
