@@ -21,8 +21,8 @@
     </div>
     <!-- 防止裂图  v-if="item.imgUrl" -->
     <ShopInfo :item="item" :showBorder="false" v-if="item.imgUrl" />
-    <Content />
-    <Cart />
+    <Content :shopName="item.title" />
+    <Cart :shopName="item.title" />
   </div>
 </template>
 <script>

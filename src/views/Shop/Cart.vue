@@ -46,6 +46,7 @@
         </div>
       </div>
     </div>
+    <!-- 购物车商品内容列表 -->
     <div
       class="cart__detail"
       v-if="cartShow && JSON.stringify(cartItems) !== '{}'"
@@ -92,30 +93,33 @@
                 ¥{{ item.originalPrice }}
               </div>
             </div>
-            <!--  -->
+
             <div class="cart__detail__item__right__bottom__count">
+              <!-- 减号图标 -->
               <span
-                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']"
                 class="cart__detail__item__right__bottom__count__minus-iconfont"
                 @click="
                   () => {
-                    changeItemToCart(shopId, item.id, item, -1);
+                    changeItemToCart(shopId, shopName, item.id, item, -1);
                   }
                 "
               >
                 &#xe8a7;
               </span>
+              <!-- 商品数量 -->
               <span
-                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']"
                 class="cart__detail__item__right__bottom__count__number"
               >
-                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
+                {{ cartData?.[shopId]?.itemList?.[item.id]?.["count"] }}
               </span>
+              <!-- 加号图标 -->
               <span
                 class="cart__detail__item__right__bottom__count__plus-iconfont"
                 @click="
                   () => {
-                    changeItemToCart(shopId, item.id, item, 1);
+                    changeItemToCart(shopId, shopName, item.id, item, 1);
                   }
                 "
               >
@@ -126,6 +130,7 @@
         </div>
       </div>
     </div>
+    <!-- 购物车结算 -->
     <div
       class="cart__count"
       @click="
@@ -170,7 +175,7 @@ const useCartEffect = () => {
   //使用计算函数，计算商品数量
   const total = computed(() => {
     //获取商品列表的id
-    const itemList = cartData[shopId];
+    const itemList = cartData[shopId]?.itemList || {};
 
     let count = 0;
     //如果没有数量记录，直接返回
@@ -183,7 +188,7 @@ const useCartEffect = () => {
   });
   //计算总商品价格
   const sumPrice = computed(() => {
-    const itemList = cartData[shopId];
+    const itemList = cartData[shopId]?.itemList || {};
     let sum = 0.0;
     if (itemList) {
       for (let key in itemList) {
@@ -197,7 +202,7 @@ const useCartEffect = () => {
   //购物车列表
   const cartItems = computed(() => {
     let cartShow = ref(false);
-    const cartItems = cartData[shopId] || {};
+    const cartItems = cartData[shopId]?.itemList || {};
     if (JSON.stringify(cartItems) === "{}") {
       cartShow.value = false;
     }
@@ -213,7 +218,7 @@ const useCartEffect = () => {
   };
   //购物车选项框全选
   const allChecked = computed(() => {
-    const itemList = cartData[shopId];
+    const itemList = cartData[shopId]?.itemList || {};
     let result = true;
     if (itemList) {
       for (let key in itemList) {
@@ -253,6 +258,7 @@ const useCartShowEffect = () => {
 };
 export default {
   name: "Cart",
+  props:['shopName'],
   setup() {
     const { changeItemToCart, cartData } = useCommonCartEffect();
     const {
@@ -296,18 +302,18 @@ export default {
 .cart {
   position: fixed;
   background-color: #fff;
-  width: 375px;
+  width: 375rem;
   left: 0;
   bottom: 0;
   &__header {
     box-sizing: border-box;
-    padding: 0 18px;
+    padding: 0 18rem;
     width: 100%;
-    height: 52px;
+    height: 52rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1rem solid #f1f1f1;
     &__left {
       display: flex;
       justify-content: center;
@@ -319,18 +325,18 @@ export default {
       }
       &__text {
         font-family: PingFangSC-Regular;
-        font-size: 14px;
+        font-size: 14rem;
         color: #333333;
-        line-height: 20px;
+        line-height: 20rem;
       }
     }
     &__right {
       &__clear-cart {
         font-family: PingFangSC-Regular;
-        font-size: 14px;
+        font-size: 14rem;
         color: #333333;
         text-align: right;
-        line-height: 16px;
+        line-height: 16rem;
       }
     }
   }
@@ -365,10 +371,10 @@ export default {
         &__top {
           font-size: 14rem;
           color: #333333;
-          margin-bottom: 8px;
+          margin-bottom: 8rem;
         }
         &__middle {
-          font-size: 12px;
+          font-size: 12rem;
           color: #333333;
           margin-bottom: 6rem;
         }
@@ -380,14 +386,14 @@ export default {
             display: flex;
             align-items: center;
             &__promotion {
-              font-size: 14px;
+              font-size: 14rem;
               color: #e93b3b;
 
               margin-right: 8rem;
             }
             &__original {
               font-family: PingFangSC-Regular;
-              font-size: 10px;
+              font-size: 10rem;
               color: #999999;
               text-decoration: line-through;
             }
@@ -397,17 +403,17 @@ export default {
             align-items: center;
             &__minus-iconfont {
               color: #666666;
-              font-size: 20px;
+              font-size: 20rem;
             }
             &__number {
               font-family: PingFangSC-Regular;
-              font-size: 14px;
+              font-size: 14rem;
               color: #333333;
-              margin-left: 10px;
-              margin-right: 10px;
+              margin-left: 10rem;
+              margin-right: 10rem;
             }
             &__plus-iconfont {
-              font-size: 20px;
+              font-size: 20rem;
               color: #0091ff;
             }
           }
@@ -416,7 +422,7 @@ export default {
     }
   }
   &__count {
-    box-shadow: 0 -1px 1px 0 #f1f1f1;
+    box-shadow: 0 -1rem 1rem 0 #f1f1f1;
     left: 0;
     right: 0;
     bottom: 0;
@@ -429,51 +435,51 @@ export default {
       align-items: center;
       &__icon {
         position: relative;
-        margin-left: 24px;
-        margin-right: 32px;
+        margin-left: 24rem;
+        margin-right: 32rem;
         &__image {
-          width: 28px;
-          height: 26px;
+          width: 28rem;
+          height: 26rem;
         }
         &__number {
           display: block;
-          min-width: 20px;
-          height: 20px;
+          min-width: 20rem;
+          height: 20rem;
           background: #e93b3b;
           border-radius: 10rem;
           font-family: PingFangSC-Medium;
-          font-size: 16px;
+          font-size: 16rem;
           transform: scale(0.5, 0.5);
           transform-origin: left top;
           color: #ffffff;
           text-align: center;
           position: absolute;
-          left: 24px;
-          top: -4px;
+          left: 24rem;
+          top: -4rem;
         }
       }
       &__count {
         display: flex;
         align-items: center;
         font-family: PingFangSC-Regular;
-        font-size: 12px;
+        font-size: 12rem;
         color: #333333;
         &__price {
           font-family: PingFangSC-Medium;
-          font-size: 18px;
+          font-size: 18rem;
           color: #e93b3b;
         }
       }
     }
     &__right {
-      width: 98px;
-      height: 49px;
+      width: 98rem;
+      height: 49rem;
       background-color: #4fb0f9;
       font-family: PingFangSC-Medium;
-      font-size: 14px;
+      font-size: 14rem;
       color: #ffffff;
       text-align: center;
-      line-height: 49px;
+      line-height: 49rem;
     }
   }
 }

@@ -45,21 +45,21 @@
             </div>
             <div class="content__right__item__right__bottom__count">
               <span
-                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']"
                 class="content__right__item__right__bottom__count__minus-iconfont"
-                @click="changeItemToCart(shopId, item.id, item, -1)"
+                @click="changeItemToCart(shopId, shopName, item.id, item, -1)"
               >
                 &#xe8a7;
               </span>
               <span
-                v-show="cartData?.[shopId]?.[item.id]?.['count']"
+                v-show="cartData?.[shopId]?.itemList?.[item.id]?.['count']"
                 class="content__right__item__right__bottom__count__number"
               >
-                {{ cartData?.[shopId]?.[item.id]?.["count"] }}
+                {{ cartData?.[shopId]?.itemList?.[item.id]?.["count"] }}
               </span>
               <span
                 class="content__right__item__right__bottom__count__plus-iconfont"
-                @click="changeItemToCart(shopId, item.id, item, 1)"
+                @click="changeItemToCart(shopId, shopName, item.id, item, 1)"
               >
                 &#xe8a6;
               </span>
@@ -74,7 +74,7 @@
 import { ref, watchEffect, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { get } from "../../unils/request";
-import {useCommonCartEffect} from "./commonCartEffect.js";
+import { useCommonCartEffect } from "./commonCartEffect.js";
 
 //商品详情的数据
 const leftItems = [
@@ -129,6 +129,7 @@ const userContentEffect = (currentItemName) => {
 
 export default {
   name: "Content",
+  props:['shopName'],
   setup() {
     const { cartData, changeItemToCart } = useCommonCartEffect();
     const { currentItemName, handleClickName } = userHandleClickName();
