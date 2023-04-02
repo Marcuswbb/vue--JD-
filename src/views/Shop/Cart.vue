@@ -155,7 +155,9 @@
           <span class="cart__count__left__count__price">¥{{ sumPrice }} </span>
         </div>
       </div>
-      <div class="cart__count__right">去结算</div>
+      <router-link :to="total ? { path: `/order-confirmation/${shopId}` } : ' '">
+        <div class="cart__count__right">去结算</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -163,7 +165,7 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { useCommonCartEffect } from "./commonCartEffect.js";
+import { useCommonCartEffect } from "../../effects/commonCartEffect.js";
 
 const useCartEffect = () => {
   const store = useStore();
@@ -258,7 +260,7 @@ const useCartShowEffect = () => {
 };
 export default {
   name: "Cart",
-  props:['shopName'],
+  props: ["shopName"],
   setup() {
     const { changeItemToCart, cartData } = useCommonCartEffect();
     const {

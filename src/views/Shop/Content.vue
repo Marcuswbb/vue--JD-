@@ -74,7 +74,7 @@
 import { ref, watchEffect, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import { get } from "../../unils/request";
-import { useCommonCartEffect } from "./commonCartEffect.js";
+import { useCommonCartEffect } from "../../effects/commonCartEffect.js";
 
 //商品详情的数据
 const leftItems = [
