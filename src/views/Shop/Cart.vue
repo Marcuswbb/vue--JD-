@@ -155,7 +155,11 @@
           <span class="cart__count__left__count__price">¥{{ sumPrice }} </span>
         </div>
       </div>
-      <router-link :to="total ? { path: `/order-confirmation/${shopId}` } : ' '">
+      <router-link
+        :to="
+          total.count !== 0 ? { path: `/order-confirmation/${shopId}` } : ' '
+        "
+      >
         <div class="cart__count__right">去结算</div>
       </router-link>
     </div>

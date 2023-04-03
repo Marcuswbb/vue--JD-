@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 开发首页docker -->
-    <Docker />
+    <Docker tag="home" />
     <!-- 首页 header -->
     <div class="container">
       <!-- 首页内容头部 -->

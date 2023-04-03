@@ -44,6 +44,12 @@ const routes = [
     path: '/order-confirmation/:shopId',
     name: 'OrderConfirmation',
     component: () => import('../views/Order/OrderConfirmation.vue')
+  },
+  {
+    //跳转到订单列表页面
+    path: '/order-list',
+    name: 'OrderList',
+    component: () => import('../views/Order/OrderList.vue')
   }
 ]
 const router = createRouter({

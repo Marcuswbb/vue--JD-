@@ -3,8 +3,13 @@
     <!-- 开发首页docker -->
     <div class="docker">
       <span
+        @click="
+          () => {
+            dockerItemClick(item.path);
+          }
+        "
         v-for="(item, index) of dockerItems"
-        :class="{ docker__item: true, docker__item__active: index === 3 }"
+        :class="{ docker__item: true, docker__item__active: item.tag === tag }"
         :key="item.icon"
       >
         <span class="docker__item__iconfont iconfont" v-html="item.icon">
@@ -15,28 +20,43 @@
   </div>
 </template>
 <script>
+import { useRouter } from "vue-router";
+
 export default {
   name: "Docker",
+  props: ["tag"],
   setup() {
+    const router = useRouter();
     const dockerItems = [
       {
         icon: "&#xe602;",
         text: " 首页 ",
+        tag: "home",
+        path: "/",
       },
       {
         icon: "&#xe640;",
         text: " 购物车 ",
+        tag: "cart",
+        path: "/",
       },
       {
         icon: "&#xe626;",
         text: " 订单 ",
+        tag: "order",
+        path: "/order-list",
       },
       {
         icon: "&#xe8bb;",
         text: " 我的 ",
+        tag: "user",
+        path: "/",
       },
     ];
-    return { dockerItems };
+    const dockerItemClick = (path) => {
+      router.push({ path: path });
+    };
+    return { dockerItems, dockerItemClick };
   },
 };
 </script>

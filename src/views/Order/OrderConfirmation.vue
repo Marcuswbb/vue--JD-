@@ -129,7 +129,7 @@
         <div class="container__mask__white-panel__buttons">
           <div
             class="container__mask__white-panel__buttons__cancel"
-            @click="cancelClick"
+            @click="cancelOrderClick"
           >
             取消订单
           </div>
@@ -207,6 +207,10 @@ const useShowMoreEffect = () => {
 };
 //弹框的显示和隐藏
 const usemaskShowEffect = () => {
+  const store = useStore();
+  const route = useRoute();
+  const router = useRouter();
+  const shopId = route.params.shopId;
   let maskShow = ref(false);
   // 白色面板
   const whitePanelShow = ref(false);
@@ -250,6 +254,7 @@ const usemaskShowEffect = () => {
     // 通知面板关闭
     noticePanelShow.value = false;
     // 跳转到订单页
+    router.push({ name: "OrderList" });
   };
   // 点击确认支付
   const confirmPayClick = () => {
@@ -259,6 +264,11 @@ const usemaskShowEffect = () => {
     whitePanelShow.value = false;
     // 通知面板关闭
     noticePanelShow.value = true;
+    store.commit("clearCart", { shopId });
+    // 跳转到订单页
+    setTimeout(() => {
+      router.push({ name: "OrderList" });
+    }, 1000);
   };
   return {
     maskShow,
