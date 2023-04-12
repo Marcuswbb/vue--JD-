@@ -1,6 +1,10 @@
 <template>
   <!-- 购物车蒙层 -->
-  <div class="mask" v-if="cartShow && JSON.stringify(cartItems) !== '{}'"></div>
+  <div
+    class="mask"
+    v-if="cartShow && JSON.stringify(cartItems) !== '{}'"
+    @click="maskShowClick"
+  ></div>
   <div class="cart">
     <!-- 头部, 全选 -->
     <!-- JSON.stringify(cartItems) !== '{}' 判断购物车里商品是否为空，购物车没有商品就不显示购物车商品列表 -->
@@ -260,7 +264,12 @@ const useCartShowEffect = () => {
       cartShow.value = !cartShow.value;
     }
   };
-  return { handleCartShowChange, cartShow };
+  //点击遮罩层取消显示购物车列表
+  const maskShowClick = () => {
+    cartShow.value = false;
+
+  };
+  return { handleCartShowChange, cartShow, maskShowClick };
 };
 export default {
   name: "Cart",
@@ -277,7 +286,7 @@ export default {
       allChecked,
       setAllChecked,
     } = useCartEffect();
-    const { handleCartShowChange, cartShow } = useCartShowEffect();
+    const { handleCartShowChange, cartShow,maskShowClick } = useCartShowEffect();
     return {
       total,
       sumPrice,
@@ -291,6 +300,7 @@ export default {
       setAllChecked,
       handleCartShowChange,
       cartShow,
+      maskShowClick,
     };
   },
 };

@@ -77,12 +77,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container__nav {
-  padding-left: 14px;
-  padding-right: 14px;
+  padding-left: 14rem;
+  padding-right: 14rem;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 16rem;
   &__item {
     width: 20%;
     display: flex;
@@ -92,11 +92,11 @@ export default {
     &__img {
       height: 40rem;
       width: 40rem;
-      margin-bottom: 6px;
+      margin-bottom: 6rem;
     }
     &__text {
       font-family: PingFangSC-Regular;
-      font-size: 12px;
+      font-size: 12rem;
       color: #333333;
       text-align: center;
     }

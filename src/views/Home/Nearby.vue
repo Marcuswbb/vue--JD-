@@ -51,7 +51,7 @@ export default {
 </script>
 <style lang="scss">
 .container__nearby {
-  padding: 16px 18px;
+  padding: 16rem 18rem;
   &__title {
     font-size: 18rem;
     color: #333333;

@@ -50,7 +50,7 @@ export default {
         icon: "&#xe8bb;",
         text: " 我的 ",
         tag: "user",
-        path: "/",
+        path: "/user",
       },
     ];
     const dockerItemClick = (path) => {
@@ -83,7 +83,7 @@ export default {
       font-size: 20rem;
     }
     &__text {
-      font-size: 10px;
+      font-size: 10rem;
       transform: scale(0.6, 0.6);
       transform-origin: center top;
     }

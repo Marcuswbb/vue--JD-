@@ -50,6 +50,12 @@ const routes = [
     path: '/order-list',
     name: 'OrderList',
     component: () => import('../views/Order/OrderList.vue')
+  },
+  {
+    //跳转到用户列表页面
+    path: '/user',
+    name: 'User',
+    component: () => import('../views/User/User.vue')
   }
 ]
 const router = createRouter({

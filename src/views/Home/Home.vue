@@ -45,7 +45,7 @@
       font-size: 20rem;
     }
     &__text {
-      font-size: 10px;
+      font-size: 10rem;
       transform: scale(0.6, 0.6);
       transform-origin: center top;
     }
@@ -92,29 +92,29 @@
       width: 339rem;
       height: 32rem;
       background: #f5f5f5;
-      border-radius: 16px;
+      border-radius: 16rem;
       font-size: 14rem;
       padding-left: 44rem;
       box-sizing: border-box;
       &::-webkit-input-placeholder {
         font-family: PingFangSC-Regular;
-        font-size: 14px;
-        line-height: 16px;
+        font-size: 14rem;
+        line-height: 16rem;
       }
       &:-moz-placeholder {
         font-family: PingFangSC-Regular;
-        font-size: 14px;
-        line-height: 16px;
+        font-size: 14rem;
+        line-height: 16rem;
       }
       &::-moz-placeholder {
         font-family: PingFangSC-Regular;
-        font-size: 14px;
-        line-height: 16px;
+        font-size: 14rem;
+        line-height: 16rem;
       }
       &:-ms-input-placeholder {
         font-family: PingFangSC-Regular;
-        font-size: 14px;
-        line-height: 16px;
+        font-size: 14rem;
+        line-height: 16rem;
       }
     }
     &__iconfont {
@@ -137,12 +137,12 @@
   }
   // 首页快捷导航
   &__nav {
-    padding-left: 14px;
-    padding-right: 14px;
+    padding-left: 14rem;
+    padding-right: 14rem;
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
-    margin-top: 16px;
+    margin-top: 16rem;
     &__item {
       width: 20%;
       display: flex;
@@ -152,11 +152,11 @@
       &__img {
         height: 40rem;
         width: 40rem;
-        margin-bottom: 6px;
+        margin-bottom: 6rem;
       }
       &__text {
         font-family: PingFangSC-Regular;
-        font-size: 12px;
+        font-size: 12rem;
         color: #333333;
         text-align: center;
       }
@@ -168,7 +168,7 @@
     background: #f1f1f1;
   }
   &__nearby {
-    padding: 16px 18px;
+    padding: 16rem 18rem;
 
     &__title {
       font-size: 18rem;
@@ -187,9 +187,9 @@
       &__right {
         margin-left: 16rem;
         background-color: #fff;
-        border-bottom: 1px solid #f1f1f1;
+        border-bottom: 1rem solid #f1f1f1;
         &__title {
-          font-size: 16px;
+          font-size: 16rem;
           color: #333333;
         }
         &__tags {
@@ -197,15 +197,15 @@
           flex-direction: row;
           margin: 8rem 0rem;
           &__item {
-            font-size: 13px;
+            font-size: 13rem;
             color: #333333;
             padding-right: 16rem;
           }
         }
         &__notice {
-          font-size: 13px;
+          font-size: 13rem;
           color: #e93b3b;
-          margin-bottom: 25px;
+          margin-bottom: 25rem;
         }
       }
     }

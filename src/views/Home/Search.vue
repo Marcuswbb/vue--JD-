@@ -26,29 +26,29 @@ export default {
     width: 339rem;
     height: 32rem;
     background: #f5f5f5;
-    border-radius: 16px;
+    border-radius: 16rem;
     font-size: 14rem;
     padding-left: 44rem;
     box-sizing: border-box;
     &::-webkit-input-placeholder {
       font-family: PingFangSC-Regular;
-      font-size: 14px;
-      line-height: 16px;
+      font-size: 14rem;
+      line-height: 16rem;
     }
     &:-moz-placeholder {
       font-family: PingFangSC-Regular;
-      font-size: 14px;
-      line-height: 16px;
+      font-size: 14rem;
+      line-height: 16rem;
     }
     &::-moz-placeholder {
       font-family: PingFangSC-Regular;
-      font-size: 14px;
-      line-height: 16px;
+      font-size: 14rem;
+      line-height: 16rem;
     }
     &:-ms-input-placeholder {
       font-family: PingFangSC-Regular;
-      font-size: 14px;
-      line-height: 16px;
+      font-size: 14rem;
+      line-height: 16rem;
     }
   }
   &__iconfont {

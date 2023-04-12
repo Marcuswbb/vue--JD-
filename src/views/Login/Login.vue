@@ -140,16 +140,16 @@ export default {
     margin-top: 40rem;
     &__item {
       background: #f9f9f9;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-radius: 6px;
+      border: 1rem solid rgba(0, 0, 0, 0.1);
+      border-radius: 6rem;
       width: 295rem;
       height: 48rem;
       margin-bottom: 16rem;
       font-family: PingFangSC-Regular;
-      font-size: 16px;
+      font-size: 16rem;
       color: rgba(0, 0, 0, 0.5);
       letter-spacing: 0;
-      line-height: 24px;
+      line-height: 24rem;
       padding-left: 16rem;
       box-sizing: border-box;
     }
@@ -158,11 +158,11 @@ export default {
     text-align: center;
     &__login {
       background: #0091ff;
-      box-shadow: 0 4px 8px 0 rgba(0, 145, 255, 0.32);
-      border-radius: 4px;
+      box-shadow: 0 4rem 8rem 0 rgba(0, 145, 255, 0.32);
+      border-radius: 4rem;
       width: 295rem;
       height: 48rem;
-      font-size: 16px;
+      font-size: 16rem;
       color: #ffffff;
       text-align: center;
       border: none;
@@ -173,13 +173,13 @@ export default {
     margin-top: 16rem;
     &__a {
       font-family: PingFangSC-Regular;
-      font-size: 14px;
+      font-size: 14rem;
       color: rgba(0, 0, 0, 0.5);
       letter-spacing: 0;
     }
     &__gap {
       font-family: PingFangSC-Regular;
-      font-size: 12px;
+      font-size: 12rem;
       color: rgba(0, 0, 0, 0.5);
       letter-spacing: 0;
       margin: 0 12rem;

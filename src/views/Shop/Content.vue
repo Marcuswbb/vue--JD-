@@ -129,7 +129,7 @@ const userContentEffect = (currentItemName) => {
 
 export default {
   name: "Content",
-  props:['shopName'],
+  props: ["shopName"],
   setup() {
     const { cartData, changeItemToCart } = useCommonCartEffect();
     const { currentItemName, handleClickName } = userHandleClickName();
@@ -158,10 +158,10 @@ export default {
   display: flex;
   &__left {
     background: #f5f5f5;
-    border-radius: 2px;
+    border-radius: 2rem;
     &__item {
-      width: 76px;
-      height: 40px;
+      width: 76rem;
+      height: 40rem;
       text-align: center;
       font-size: 14rem;
       line-height: 40rem;
@@ -178,7 +178,7 @@ export default {
     &__item {
       margin: 0 18rem 12rem 16rem;
       display: flex;
-      border-bottom: 1px solid #f1f1f1;
+      border-bottom: 1rem solid #f1f1f1;
       &__left {
         margin-right: 16rem;
         &__image {
@@ -192,10 +192,10 @@ export default {
         &__top {
           font-size: 14rem;
           color: #333333;
-          margin-bottom: 8px;
+          margin-bottom: 8rem;
         }
         &__middle {
-          font-size: 12px;
+          font-size: 12rem;
           color: #333333;
           margin-bottom: 6rem;
         }
@@ -207,14 +207,14 @@ export default {
             display: flex;
             align-items: center;
             &__promotion {
-              font-size: 14px;
+              font-size: 14rem;
               color: #e93b3b;
 
               margin-right: 8rem;
             }
             &__original {
               font-family: PingFangSC-Regular;
-              font-size: 10px;
+              font-size: 10rem;
               color: #999999;
               text-decoration: line-through;
             }
@@ -224,17 +224,17 @@ export default {
             align-items: center;
             &__minus-iconfont {
               color: #666666;
-              font-size: 20px;
+              font-size: 20rem;
             }
             &__number {
               font-family: PingFangSC-Regular;
-              font-size: 14px;
+              font-size: 14rem;
               color: #333333;
-              margin-left: 10px;
-              margin-right: 10px;
+              margin-left: 10rem;
+              margin-right: 10rem;
             }
             &__plus-iconfont {
-              font-size: 20px;
+              font-size: 20rem;
               color: #0091ff;
             }
           }

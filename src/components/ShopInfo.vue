@@ -3,13 +3,18 @@
     <div class="shop-info__left">
       <img class="shop-info__left__img" :src="item.imgUrl" alt="" />
     </div>
-    <div :class="{'shop-info__right':true ,'shop-info__right--border':showBorder}">
+    <div
+      :class="{
+        'shop-info__right': true,
+        'shop-info__right--border': showBorder,
+      }"
+    >
       <div class="shop-info__right__title">
         {{ item.title }}
       </div>
       <div class="shop-info__right__tags">
         <div
-          class="shop-info__right__tags__item  "
+          class="shop-info__right__tags__item"
           v-for="(tagsItem, tagsIndex) of item.tags"
           :key="tagsIndex"
         >
@@ -26,7 +31,7 @@
 <script>
 export default {
   name: "ShopItem",
-  props: ["item","showBorder"],
+  props: ["item", "showBorder"],
 };
 </script>
 
@@ -45,7 +50,7 @@ export default {
     margin-left: 16rem;
     background-color: #fff;
     &--border {
-      border-bottom: 1px solid #f1f1f1; 
+      border-bottom: 1rem solid #f1f1f1;
     }
     &__title {
       font-size: 16rem;
@@ -61,9 +66,9 @@ export default {
       }
     }
     &__notice {
-      font-size: 13px;
+      font-size: 13rem;
       color: #e93b3b;
-      margin-bottom: 25px;
+      margin-bottom: 25rem;
     }
   }
 }
