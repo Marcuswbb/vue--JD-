@@ -37,6 +37,11 @@
         >已有账号去登录</a
       >
     </div>
+    <div class="beian">
+      <a href="https://beian.miit.gov.cn/" target="_blank"
+        >粤ICP备2022079633号-1</a
+      >
+    </div>
   </div>
   <Toast v-if="isShow" :message="toastMessage" />
 </template>
@@ -195,6 +200,20 @@ export default {
       color: rgba(0, 0, 0, 0.5);
       letter-spacing: 0;
       margin: 0 12rem;
+    }
+  }
+  .beian {
+    width: 100%;
+    position: fixed;
+    bottom: 20rem;
+    display: flex;
+    justify-content: center;
+    color: gray;
+    a:link {
+      color: gray;
+    }
+    a:visited {
+      color: gray;
     }
   }
 }
