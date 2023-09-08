@@ -43,7 +43,7 @@
         </div>
         <div class="user__contain__item__right">&#xe65f;</div>
       </div>
-      <div class="user__contain__item">
+      <div class="user__contain__item" @click="toAddressList">
         <div class="user__contain__item__left">
           <span
             class="user__contain__item__left__iconfrom"
@@ -70,12 +70,12 @@
   <Docker tag="user" />
 </template>
 
-<script>
+<script setup>
+import router from "@/router";
 import Docker from "../../components/Docker.vue";
 
-export default {
-  name: "User",
-  components: { Docker },
+const toAddressList = () => {
+  router.push("/address-list");
 };
 </script>
 
