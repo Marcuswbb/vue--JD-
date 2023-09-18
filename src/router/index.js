@@ -45,6 +45,12 @@ const routes = [
     name: "OrderConfirmation",
     component: () => import("../views/Order/OrderConfirmation.vue"),
   },
+  // 配置购物车路由
+  {
+    path: "/cart", // 路径
+    name: "Cart", // 路由名称
+    component: () => import("../views/Cart/Cart.vue"), // 对应的组件
+  },
   {
     //跳转到订单列表页面
     path: "/order-list",
@@ -62,6 +68,17 @@ const routes = [
     path: "/address-list", // 路径
     name: "AddressList", // 路由名称
     component: () => import("../views/address/AddressList.vue"), // 对应的组件
+  },
+  {
+    path: "/address-create", // 路径
+    name: "AddressCreate", // 路由名称
+    component: () => import("../views/address/AddressCreate.vue"), // 对应的组件
+  },
+  // 配置地址编辑路由
+  {
+    path: "/address-edit/:id", // 路径
+    name: "AddressEdit", // 路由名称
+    component: () => import("../views/address/AddressEdit.vue"), // 对应的组件
   },
 ];
 const router = createRouter({

@@ -12,7 +12,7 @@
         class="container__input__username container__input__item"
         type="text"
         placeholder="请输入手机号"
-        v-model="phone"
+        v-model="username"
       />
       <input
         class="container__input__password container__input__item"
@@ -56,14 +56,14 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 const userLoginEffect = (showToast) => {
   //定义数据
   const data = reactive({
-    phone: "",
+    username: "",
     password: "",
   });
   const router = useRouter();
   //点击登录，跳转到首页
   const handleLogin = async () => {
     //判断input里内容不能为空
-    if (data.phone === "") {
+    if (data.username === "") {
       showToast("手机号不能为空");
       return;
     }
@@ -74,15 +74,16 @@ const userLoginEffect = (showToast) => {
     //调用接口
     try {
       const result = await post("/user/login", {
-        phone: "data.userName",
-        password: "data.password",
+        username: data.username,
+        password: data.password,
       });
       if (result.data.code === "0000") {
         localStorage.setItem("isLogin", "true");
         router.push({ name: "Home" });
       } else {
         showToast("登陆失败");
-        console.log(result.data.desc);
+        console.log(result.data);
+        console.log(result.data.errno);
       }
     } catch (err) {
       showToast("发送请求失败！");
@@ -90,9 +91,9 @@ const userLoginEffect = (showToast) => {
     }
   };
   // 返回数据
-  const { phone, password } = toRefs(data);
+  const { username, password } = toRefs(data);
   return {
-    phone,
+    username,
     password,
     handleLogin,
   };
@@ -113,13 +114,13 @@ export default {
     //对提示框的解构
     const { isShow, toastMessage, showToast } = showToastEffect();
     //对数据进行解构
-    const { phone, password, handleLogin } = userLoginEffect(showToast);
+    const { username, password, handleLogin } = userLoginEffect(showToast);
     //对跳转到注册页面进行解构
     const { handleRegister } = userRegisterEffect();
     return {
       handleLogin,
       handleRegister,
-      phone,
+      username,
       password,
       isShow,
       toastMessage,

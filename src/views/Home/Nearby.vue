@@ -23,7 +23,7 @@ const useNearbyEffect = (showToast) => {
   const nearbyItems = ref([]);
   const getNearbyItems = async () => {
     try {
-      const result = await get("/home/nearby");
+      const result = await get("/home/Nearby");
       if (result.data.code === "0000") {
         nearbyItems.value = result.data.data;
       } else {

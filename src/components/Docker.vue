@@ -38,7 +38,7 @@ export default {
         icon: "&#xe640;",
         text: " 购物车 ",
         tag: "cart",
-        path: "/",
+        path: "/cart",
       },
       {
         icon: "&#xe626;",

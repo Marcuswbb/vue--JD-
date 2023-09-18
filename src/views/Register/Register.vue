@@ -12,13 +12,13 @@
         class="container__input__username container__input__item"
         type="text"
         placeholder="请输入手机号"
-        :v-model="phone"
+        v-model="username"
       />
       <input
         class="container__input__password container__input__item"
         type="password"
         placeholder="请输入密码"
-        :v-model="password"
+        v-model="password"
       />
       <input
         class="container__input__password container__input__item"
@@ -55,7 +55,7 @@ import Toast, { showToastEffect } from "../../components/Toast.vue";
 const userRegisterEffect = (showToast) => {
   //定义数据
   const data = reactive({
-    phone: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
@@ -63,7 +63,7 @@ const userRegisterEffect = (showToast) => {
   //点击注册，跳转到首页
   const handleRegister = async () => {
     //判断input里内容不能为空
-    if (data.phone === "") {
+    if (data.username === "") {
       showToast("手机号不能为空");
       return;
     }
@@ -82,7 +82,7 @@ const userRegisterEffect = (showToast) => {
       //调用接口
       try {
         const result = await post("/user/register", {
-          phone: "data.phone",
+          username: "data.username",
           password: "data.password",
         });
         if (result.data.code === "0000") {
@@ -99,9 +99,9 @@ const userRegisterEffect = (showToast) => {
     }
   };
   // 返回数据
-  const { phone, password, confirmPassword } = toRefs(data);
+  const { username, password, confirmPassword } = toRefs(data);
   return {
-    phone,
+    username,
     password,
     confirmPassword,
     handleRegister,
@@ -123,14 +123,14 @@ export default {
     //对提示框的解构
     const { isShow, toastMessage, showToast } = showToastEffect();
     //
-    const { phone, password, confirmPassword, handleRegister } =
+    const { username, password, confirmPassword, handleRegister } =
       userRegisterEffect(showToast);
     //
     const { handleLogin } = userLoginEffect();
     return {
       isShow,
       toastMessage,
-      phone,
+      username,
       password,
       confirmPassword,
       handleRegister,

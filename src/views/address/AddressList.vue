@@ -1,13 +1,14 @@
 <template>
   <div class="container">
     <div class="head">
-      <span class="icon-left" @click="backToUser"> 《 </span>
+      <span class="icon-left" @click="backToUser"> &#xe600;</span>
       <span class="title">管理收货地址</span>
-      <span class="button">新建</span>
+      <span class="button" @click="createAddress">新建</span>
     </div>
     <div class="title">我的收货地址</div>
     <div class="address-list">
       <div
+      @click="toEditAddress(address.id)"
         class="address-item"
         v-for="address of addressList.data"
         :key="address.id"
@@ -48,7 +49,14 @@ const getAddressList = async () => {
 const backToUser = () => {
   router.push("/user");
 };
+const createAddress = () => {
+  router.push("/address-create")
+}
+const toEditAddress = (id) => {
+  router.push(`/address-edit/${id}`)
+}
 </script>
+
 <style lang="scss" scoped>
 .container {
   width: 100vw;
