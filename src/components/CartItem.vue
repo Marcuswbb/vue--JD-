@@ -14,7 +14,7 @@
           <span class="compute-type"> × </span>
           <span class="count">{{ item.cartCount }}</span>
         </div>
-        <div class="right flr">
+        <div class="right fr">
           <span class="total">{{
             (item.currentPrice * item.cartCount).toFixed(2)
           }}</span>
@@ -77,7 +77,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.cart—item {
+.cart-item {
   width: 90.4vw;
   background: #ffffff;
   border-radius: 1.0667vw;
@@ -104,6 +104,7 @@ export default {
       margin-right: 4.2667vw;
     }
     .product-name {
+      line-height: 1.3;
       font-family: PingFangSC-Medium;
       font-weight: 500;
       font-size: 3.7333vw;

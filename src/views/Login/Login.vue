@@ -77,12 +77,11 @@ const userLoginEffect = (showToast) => {
         username: data.username,
         password: data.password,
       });
-      if (result.data.code === "0000") {
+      if (result.data.errno === 0) {
         localStorage.setItem("isLogin", "true");
         router.push({ name: "Home" });
       } else {
         showToast("登陆失败");
-        console.log(result.data);
         console.log(result.data.errno);
       }
     } catch (err) {

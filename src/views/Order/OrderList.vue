@@ -1,27 +1,37 @@
 <template>
-  <div class="header">我的订单</div>
   <div class="container">
-    <div class="container__order" v-for="item of orderList" :key="item.shopId">
-      <div class="container__order__top">
-        <div class="container__order__top__title">{{ item.shopName }}</div>
-        <div class="container__order__top__status">已取消</div>
-      </div>
-      <div class="container__order__bottom">
-        <div class="container__order__bottom__products">
-          <img
-            v-for="productItem of item.itemList"
-            :key="productItem.id"
-            :src="productItem.imgUrl"
-            class="container__order__bottom__products__image"
-            alt=""
-          />
+    <div class="head">
+      <span class="iconfont"></span>
+      <span class="title">我的订单</span>
+      <span class="button"></span>
+    </div>
+    <div class="order-list">
+      <div
+        v-for="(order, index) of orderList"
+        :key="order.id"
+        class="order-item"
+      >
+        <div class="top">
+          <span class="shop-name">{{ order.shopName }}</span>
+          <span class="order-status">{{
+            order.isCanceled ? "已取消" : "已完成"
+          }}</span>
         </div>
-        <div class="container__order__bottom__count">
-          <div class="container__order__bottom__count__total-price">
-            ¥{{ computeTotalPrice(item.itemList) }}
+        <div class="bottom">
+          <div class="products">
+            <img
+              v-for="(product, index) of order.products.slice(0, 5)"
+              :key="product.id"
+              :src="product.img"
+              alt=""
+              class="product-img"
+            />
           </div>
-          <div class="container__order__bottom__count__total-number">
-            共{{ computeTotalNumber(item.itemList) }} 件
+          <div class="data">
+            <div class="price">¥{{ computedTotalPrice(order.products) }}</div>
+            <div class="count">
+              共{{ computedTotalNumber(order.products) }}件
+            </div>
           </div>
         </div>
       </div>
@@ -31,121 +41,118 @@
 </template>
 <script>
 import Docker from "../../components/Docker.vue";
-import { ref } from "vue";
-import { get } from "../../unils/request.js";
-
-const useOrderListEffect = () => {
-  const orderList = ref([]);
-  //计算订单价格
-  const computeTotalPrice = (productList) => {
-    let totalPrice = 0;
-    productList.forEach((element) => {
-      totalPrice += element.count * element.promotionPrice;
-    });
-    return totalPrice.toFixed(2);
-  };
-  // 获取订单商品的数量
-  const computeTotalNumber = (productList) => {
-    let totalNumber = 0;
-    productList.forEach((element) => {
-      totalNumber += element.count;
-    });
-    return totalNumber;
-  };
-  // 获取订单页面的数据
-  const getOrderList = async () => {
-    const result = await get("/order-list/1");
-    if (result.data.code === "0000") {
-      orderList.value = result.data.data;
-    } else {
-      orderList.value = [];
-    }
-  };
-  getOrderList();
-  return { orderList, computeTotalPrice, computeTotalNumber };
-};
-
+import { ref, onMounted, computed } from "vue";
+import { get } from "../../unils/request";
 export default {
   name: "OrderList",
-  components: { Docker },
+  components: {
+    Docker,
+  },
   setup() {
-    const { orderList, computeTotalPrice, computeTotalNumber } =
-      useOrderListEffect();
-    console.log(orderList);
-    return { orderList, computeTotalPrice, computeTotalNumber };
+    const orderList = ref([]);
+    const getOrderList = async () => {
+      // 获取订单列表, 通过接口
+      // 通过ajax, 商铺相关的信息
+      const result = await get(`/order`);
+      // 更新到响应式数据中
+      orderList.value = result.data.data;
+    };
+    onMounted(() => {
+      // 获取订单列表
+      getOrderList();
+    });
+    const computedTotalPrice = (products) => {
+      // 计算总价, 保留两位小数
+      return products
+        .reduce((total, product) => {
+          return total + product.currentPrice * product.count;
+        }, 0)
+        .toFixed(2);
+    };
+    const computedTotalNumber = (products) => {
+      // 计算总数量
+      return products.reduce((total, product) => {
+        return total + product.count;
+      }, 0);
+    };
+    return {
+      orderList,
+      computedTotalPrice, // 计算总价
+      computedTotalNumber, // 计算总数量
+    };
   },
 };
 </script>
 <style lang="scss" scoped>
-.header {
-  width: 375rem;
-  height: 44rem;
-  background-color: #fff;
-  font-family: PingFangSC-Regular;
-  font-size: 16rem;
-  color: #333333;
-  text-align: center;
-  line-height: 44rem;
-}
 .container {
-  position: fixed;
-  top: 44rem;
-  right: 0;
-  left: 0;
-  bottom: 49rem;
+  width: 100vw;
+  height: 100vh;
   background-color: #f8f8f8;
-  &__order {
-    width: 339rem;
-    height: 110rem;
-    margin: 16rem auto;
-    overflow: hidden;
-    background: #ffffff;
-    border-radius: 4rem;
-    padding: 16rem;
-    box-sizing: border-box;
-    &__top {
+  overflow: hidden;
+  @import "../../style/head-common.scss";
+  .order-list {
+    position: fixed;
+    top: 11.7333vw;
+    right: 0;
+    bottom: 13.0667vw;
+    left: 0;
+    overflow-y: auto;
+    padding-top: 4.2667vw;
+    .order-item {
+      width: 90.4vw;
+      height: 29.3333vw;
+      background: #ffffff;
+      border-radius: 1.0667vw;
+      margin: 0 auto 4.2667vw;
+      padding: 4.2667vw;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      height: 22rem;
-      margin-bottom: 16rem;
-      align-items: center;
-      &__title {
-        font-family: PingFangSC-Medium;
-        font-size: 16rem;
-        color: #333333;
-      }
-      &__status {
-        font-family: PingFangSC-Medium;
-        font-size: 14rem;
-        color: #999999;
-      }
-    }
-    &__bottom {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      &__products {
-        &__image {
-          width: 40rem;
-          height: 40rem;
-          margin-right: 12rem;
-        }
-      }
-      &__count {
-        &__total-price {
-          font-family: PingFangSC-Regular;
-          font-size: 14rem;
-          color: #e93b3b;
-          text-align: right;
-          margin-bottom: 4rem;
-          line-height: 20rem;
-        }
-        &__total-number {
-          font-family: PingFangSC-Regular;
-          font-size: 12rem;
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .shop-name {
+          font-family: PingFangSC-Medium;
+          font-weight: 500;
+          font-size: 4.2667vw;
           color: #333333;
-          line-height: 14rem;
-          text-align: right;
+        }
+        .order-status {
+          font-family: PingFangSC-Medium;
+          font-weight: 500;
+          font-size: 3.7333vw;
+          color: #999999;
+        }
+      }
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .products {
+          .product-img {
+            width: 10.6667vw;
+            height: 10.6667vw;
+            margin-right: 3.2vw;
+            object-fit: cover;
+            transform: translateY(0.5333vw);
+          }
+        }
+        .data {
+          .price {
+            font-family: PingFangSC-Regular;
+            font-size: 3.7333vw;
+            color: #e93b3b;
+            text-align: right;
+            margin-bottom: 1.0667vw;
+          }
+          .count {
+            font-family: PingFangSC-Regular;
+            font-size: 3.2vw;
+            color: #333333;
+            text-align: right;
+            line-height: 3.7333vw;
+          }
         }
       }
     }

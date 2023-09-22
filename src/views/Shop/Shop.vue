@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- 防止裂图  v-if="item.imgUrl" -->
-    <ShopInfo :item="item" :showBorder="false" v-if="item.imgUrl" />
+    <ShopInfo :item="item" :showBorder="false" v-if="item.logo" />
     <Content :shopName="item.title" />
     <Cart :shopName="item.title" />
   </div>

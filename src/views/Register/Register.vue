@@ -85,7 +85,7 @@ const userRegisterEffect = (showToast) => {
           username: "data.username",
           password: "data.password",
         });
-        if (result.data.code === "0000") {
+        if (result.data.errno === 0) {
           localStorage.setItem("isLogin", "true");
           router.push({ name: "Home" });
         } else {

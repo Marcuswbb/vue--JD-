@@ -23,8 +23,8 @@ const useNearbyEffect = (showToast) => {
   const nearbyItems = ref([]);
   const getNearbyItems = async () => {
     try {
-      const result = await get("/home/Nearby");
-      if (result.data.code === "0000") {
+      const result = await get("/shop/hot-list");
+      if (result.data.errno === 0) {
         nearbyItems.value = result.data.data;
       } else {
         showToast("获取数据失败");

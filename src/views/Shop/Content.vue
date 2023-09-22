@@ -22,25 +22,25 @@
       >
         <div class="content__right__item__left">
           <img
-            :src="item.imgUrl"
+            :src="item.img"
             alt=""
             class="content__right__item__left__image"
           />
         </div>
         <div class="content__right__item__right">
-          <div class="content__right__item__right__top">{{ item.name }}</div>
+          <div class="content__right__item__right__top">{{ item.title }}</div>
           <div class="content__right__item__right__middle">
-            月售{{ item.sales }} 件
+            月售{{ item.sale }} 件
           </div>
           <div class="content__right__item__right__bottom">
             <div class="content__right__item__right__bottom__price">
               <div
                 class="content__right__item__right__bottom__price__promotion"
               >
-                ¥{{ item.promotionPrice }}
+                ¥{{ item.currentPrice }}
               </div>
               <div class="content__right__item__right__bottom__price__original">
-                ¥{{ item.originalPrice }}
+                ¥{{ item.previousePrice }}
               </div>
             </div>
             <div class="content__right__item__right__bottom__count">
@@ -118,7 +118,7 @@ const userContentEffect = (currentItemName) => {
   const route = useRoute();
   const shopId = route.params.id;
   const getContentData = async (shopId, shopTab) => {
-    const result = await get(`/shop/${shopId}/tab/${shopTab}`);
+    const result = await get(`/shop/${shopId}/products`);
     rightItems.value = result.data.data;
   };
   watchEffect(() => {
@@ -242,6 +242,5 @@ export default {
       }
     }
   }
-
 }
 </style>

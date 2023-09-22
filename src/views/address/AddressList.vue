@@ -1,26 +1,26 @@
 <template>
   <div class="container">
     <div class="head">
-      <span class="icon-left" @click="backToUser"> &#xe600;</span>
+      <span class="iconfont icon-left" @click="backToUser">&#xe600;</span>
       <span class="title">管理收货地址</span>
       <span class="button" @click="createAddress">新建</span>
     </div>
     <div class="title">我的收货地址</div>
     <div class="address-list">
       <div
-      @click="toEditAddress(address.id)"
-        class="address-item"
-        v-for="address of addressList.data"
+        @click="toEditAddress(address.id)"
+        v-for="address of addressList"
         :key="address.id"
+        class="address-item"
       >
         <div class="left">
           <div class="top">
-            <span class="username">{{ address.username }} </span>
-            <span class="phone">{{ address.phone }} </span>
+            <span class="username">{{ address.receiveName }}</span>
+            <span class="phone">{{ address.phone }}</span>
           </div>
           <div class="bottom">
             <p class="address-info">
-              {{ address.addressInfo }}
+              {{ address.city }} {{ address.community }} {{ address.building }}
             </p>
           </div>
         </div>
@@ -31,32 +31,48 @@
     </div>
   </div>
 </template>
-<script setup>
-import { onMounted, ref } from "vue";
+<script>
+import { onMounted } from "vue";
+import { ref } from "vue";
+import router from "../../router";
+// 引入get
 import { get } from "../../unils/request";
-import router from "@/router";
-const addressList = ref([]);
-
-onMounted(() => {
-  getAddressList();
-});
-// 获取地址列表数据
-const getAddressList = async () => {
-  const res = await get(`/address-list`);
-  addressList.value = res.data;
+export default {
+  name: "AddressList",
+  setup() {
+    // 从接口中获取地址列表
+    const addressList = ref([]);
+    const getAddressList = async () => {
+      // 通过ajax, 商铺相关的信息
+      const res = await get(`/user/address`);
+      addressList.value = res.data.data;
+    };
+    // 调用接口
+    onMounted(() => {
+      getAddressList();
+    });
+    // 跳转到新建地址页面
+    const createAddress = () => {
+      // 路由跳转
+      router.push("/address-create");
+    };
+    // 跳转到用户页面
+    const backToUser = () => {
+      router.push("/user");
+    };
+    // 跳转到编辑地址页面
+    const toEditAddress = (id) => {
+      router.push(`/address-edit/${id}`);
+    };
+    return {
+      addressList,
+      createAddress,
+      backToUser,
+      toEditAddress,
+    };
+  },
 };
-// 跳转到用户页面
-const backToUser = () => {
-  router.push("/user");
-};
-const createAddress = () => {
-  router.push("/address-create")
-}
-const toEditAddress = (id) => {
-  router.push(`/address-edit/${id}`)
-}
 </script>
-
 <style lang="scss" scoped>
 .container {
   width: 100vw;

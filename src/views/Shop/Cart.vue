@@ -81,20 +81,20 @@
             &#xe601;
           </div>
           <img
-            :src="item.imgUrl"
+            :src="item.img"
             alt=""
             class="cart__detail__item__left__image"
           />
         </div>
         <div class="cart__detail__item__right">
-          <div class="cart__detail__item__right__top">{{ item.name }}</div>
+          <div class="cart__detail__item__right__top">{{ item.title }}</div>
           <div class="cart__detail__item__right__bottom">
             <div class="cart__detail__item__right__bottom__price">
               <div class="cart__detail__item__right__bottom__price__promotion">
-                ¥{{ item.promotionPrice }}
+                ¥{{ item.currentPrice }}
               </div>
               <div class="cart__detail__item__right__bottom__price__original">
-                ¥{{ item.originalPrice }}
+                ¥{{ item.previousePrice }}
               </div>
             </div>
 
@@ -203,7 +203,7 @@ const useCartEffect = () => {
     if (itemList) {
       for (let key in itemList) {
         if (itemList[key].checked) {
-          sum += itemList[key].count * itemList[key].promotionPrice;
+          sum += itemList[key].count * itemList[key].currentPrice;
         }
       }
     }

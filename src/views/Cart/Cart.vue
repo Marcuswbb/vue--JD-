@@ -13,17 +13,17 @@
           v-for="shop of Object.values(item.itemList).slice(0, 2)"
           :key="shop.id"
         >
-          <img :src="shop.imgUrl" alt="" class="fl product-img" />
-          <div class="product-name fl">{{ shop.name }}</div>
+          <img :src="shop.img" alt="" class="fl product-img" />
+          <div class="product-name fl">{{ shop.title }}</div>
           <div class="product-data fl clearfix">
             <div class="left fl">
-              <span class="price">{{ shop.originalPrice }}</span>
+              <span class="price">{{ shop.currentPrice }}</span>
               <span class="compute-type">×</span>
-              <span class="count">{{ shop.count }}</span>
+              <span class="count">{{ shop.sale }}</span>
             </div>
             <div class="right fr">
               <span class="total">{{
-                (shop.originalPrice * shop.count).toFixed(2)
+                (shop.currentPrice * shop.sale).toFixed(2)
               }}</span>
             </div>
           </div>
@@ -34,23 +34,23 @@
           :key="shop.id"
           class="cart-info clearfix"
         >
-          <img :src="shop.imgUrl" alt="" class="fl product-img" />
-          <div class="product-name fl">{{ shop.name }}</div>
+          <img :src="shop.img" alt="" class="fl product-img" />
+          <div class="product-name fl">{{ shop.title }}</div>
           <div class="product-data fl clearfix">
             <div class="left fl">
-              <span class="price">{{ shop.originalPrice }}</span>
+              <span class="price">{{ shop.currentPrice }}</span>
               <span class="compute-type"> × </span>
-              <span class="count">{{ shop.count }}</span>
+              <span class="count">{{ shop.sale }}</span>
             </div>
             <div class="right fr">
               <span class="total">{{
-                (shop.originalPrice * shop.count).toFixed(2)
+                (shop.currentPrice * shop.sale).toFixed(2)
               }}</span>
             </div>
           </div>
         </div>
         <div class="more" @click="handleShowMoreClick">
-          共计 {{ Object.values(item.itemList).length }} 件
+          共计 {{ Object.values(item.itemList).length }} 件商品
           <span class="iconfont icon-arrow-down"
             >{{ brandFold ? "↑" : "↓" }}
           </span>
@@ -69,17 +69,13 @@ import { computed, onMounted, reactive, ref } from "vue";
 const isShowMore = ref(true);
 const brandFold = ref(false);
 const store = useStore();
-// const itemList = reactive({});
 
 const cartAllData = Object.values(store.state.cartData);
 const cartData = computed(() => store.state.cartData);
-console.log(cartAllData.value);
-console.log(cartData.value);
 // 商品总数
 const total = computed(() => {
   let total = 0;
   cartAllData.forEach((item) => {
-    console.log(item.itemList);
     Object.values(item.itemList).forEach((shop) => {
       total += shop.count;
     });
@@ -87,24 +83,11 @@ const total = computed(() => {
   return total;
 });
 const shopCount = total.value;
-console.log(shopCount);
 const handleShowMoreClick = () => {
   isShowMore.value = !isShowMore.value;
   brandFold.value = !brandFold.value;
 };
-// console.log(cartData);
-// console.log(shopName);
-// console.log(Object.values(cartItem));
-// 计算商品种类
-let arr = [];
 
-cartAllData.forEach((item) => {
-  const itemList = item.itemList;
-  const shopList = Object.values(itemList).length;
-  arr.push(shopList);
-  console.log(shopList);
-});
-console.log(arr);
 </script>
 <style lang="scss" scoped>
 .container {

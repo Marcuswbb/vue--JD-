@@ -1,7 +1,7 @@
 <template>
   <div class="shop-info">
     <div class="shop-info__left">
-      <img class="shop-info__left__img" :src="item.imgUrl" alt="" />
+      <img class="shop-info__left__img" :src="item.logo" alt="" />
     </div>
     <div
       :class="{
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="shop-info__right__notice">
-        {{ item.notice }}
+        {{ item.promotion }}
       </div>
     </div>
   </div>

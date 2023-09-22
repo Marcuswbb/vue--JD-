@@ -41,7 +41,7 @@
       <div class="item">
         <span class="text">收货人：</span>
         <input
-          v-model="address.username"
+          v-model="address.receiveName"
           type="text"
           class="input-item"
           placeholder="请填写收货人的姓名"
@@ -78,7 +78,7 @@ const address = reactive({
   city: "",
   community: "",
   building: "",
-  username: "",
+  receiveName: "",
   phone: "",
 });
 
@@ -106,7 +106,7 @@ const rule = {
       message: "楼号不能为空",
     },
   ],
-  username: [
+  receiveName: [
     {
       required: true,
       message: "收货人不能为空",
@@ -139,9 +139,8 @@ const validateForm = async () => {
     // 调用接口, 保存地址
     console.log(address);
     const data = JSON.parse(JSON.stringify(address));
-    const res = await put(`address/${addressId}`, data);
-    console.log(res);
-    if (res.code === 0) {
+    const res = await put(`/user/address/${addressId}`, data);
+    if (res.errno === 0) {
       // 创建地址成功
       showToast("编辑地址成功");
       // 1秒之后跳转到地址列表页
@@ -163,7 +162,7 @@ const submitButton = () => {
 };
 // 通过接口获取地址信息
 const getAddressInfo = async () => {
-  const res = await get(`address/${addressId}`);
+  const res = await get(`/user/address/${addressId}`);
   Object.assign(address, res.data.data);
 };
 </script>

@@ -1,11 +1,9 @@
 <template>
   <div class="container">
     <div class="head">
-      <span class="iconfont icon-left" @click="backToAddressList"
-        >&#xe600;</span
-      >
+      <span class="iconfont icon-left" @click="backToAddressList">&#xe600;</span>
       <span class="title">新建收货地址</span>
-      <span class="button" @click="submitButton">保存</span>
+      <span class="button" @click="submitForm">保存</span>
     </div>
     <div class="info">
       <div class="item">
@@ -41,7 +39,7 @@
       <div class="item">
         <span class="text">收货人：</span>
         <input
-          v-model="address.username"
+          v-model="address.receiveName"
           type="text"
           class="input-item"
           placeholder="请填写收货人的姓名"
@@ -61,139 +59,127 @@
   </div>
   <Toast v-if="isShow" :message="toastMessage" />
 </template>
-<script setup>
-import router from "@/router";
+<script>
+import router from "../../router";
 import { reactive } from "vue";
+// 引入弹框组件
 import Toast, { showToastEffect } from "../../components/Toast.vue";
 import Schema from "async-validator";
 import { post } from "../../unils/request";
+export default {
+  name: "AddressCreate",
+  components: {
+    Toast,
+  },
+  setup() {
+    // 调用封装好的弹框相关的代码
+    const { showToast, isShow, toastMessage } = showToastEffect();
+    // 跳转到地址列表页面
+    const backToAddressList = () => {
+      router.push("/address-list");
+    };
+    // 定义地址对象, 用于收集表单数据
+    const address = reactive({
+      // 城市
+      city: "",
+      // 小区
+      community: "",
+      // 楼号
+      building: "",
+      // 收货人
+      receiveName: "",
+      // 联系电话
+      phone: "",
+    });
 
-const address = reactive({
-  city: "",
-  community: "",
-  building: "",
-  username: "",
-  phone: "",
-});
-
-const { isShow, toastMessage, showToast } = showToastEffect();
-const backToAddressList = () => {
-  router.push("/address-list");
-};
-
-const rule = {
-  city: [
-    {
-      required: true,
-      message: "城市不能为空",
-    },
-  ],
-  community: [
-    {
-      required: true,
-      message: "小区不能为空",
-    },
-  ],
-  building: [
-    {
-      required: true,
-      message: "楼号不能为空",
-    },
-  ],
-  username: [
-    {
-      required: true,
-      message: "收货人不能为空",
-    },
-    {
-      pattern: /^[\u4e00-\u9fa5]{2,4}$/,
-      message: "请输入有效的中文名字",
-    },
-  ],
-  phone: [
-    {
-      required: true,
-      message: "联系电话不能为空",
-    },
-    {
-      pattern: /^1[0-9]{10}$/,
-      message: "请输入有效的手机号码",
-    },
-  ],
-};
-// 校验表单
-const validateForm = async () => {
-  // 创建校验器
-  const validator = new Schema(rule);
-  try {
-    // 校验, 参数是要校验的对象, 就是收集到的表单数据
-    await validator.validate(address);
-    // 校验成功
-    console.log("校验成功");
-    // 调用接口, 保存地址
-    console.log(address);
-    const data = JSON.parse(JSON.stringify(address));
-    const res = await post("/address", data);
-    if (res.data.code === 0) {
-      // 创建地址成功
-      showToast("创建地址成功");
-      // 1秒之后跳转到地址列表页
-      setTimeout(() => {
-        // 跳转到地址列表页
-        router.push("/address-list");
-      }, 1000);
-    } else {
-      // 登录失败, 提示用户, res.message是错误信息
-      showToast(res.message);
-    }
-  } catch (errors) {
-    // 校验失败
-    showToast(errors.errors[0].message);
-  }
-};
-const submitButton = () => {
-  validateForm();
+    const rule = {
+      city: [
+        {
+          required: true, // 必填
+          message: "城市不能为空", // 提示信息
+        },
+      ],
+      community: [
+        {
+          required: true, // 必填
+          message: "小区不能为空", // 提示信息
+        },
+      ],
+      building: [
+        {
+          required: true,
+          message: "楼号不能为空",
+        },
+      ],
+      receiveName: [
+        {
+          required: true,
+          message: "收货人不能为空",
+        },
+        {
+          pattern: /^[\u4e00-\u9fa5]{2,4}$/, // 中文名字
+          message: "请输入有效的中文名字", // 提示信息
+        },
+      ],
+      phone: [
+        {
+          required: true,
+          message: "联系电话不能为空",
+        },
+        {
+          pattern: /^1[0-9]{10}$/, // 手机号码
+          message: "请输入有效的手机号码", // 提示信息
+        },
+      ],
+    };
+    // 校验表单
+    const validateForm = async () => {
+      // 创建校验器
+      const validator = new Schema(rule);
+      try {
+        // 校验, 参数是要校验的对象, 就是收集到的表单数据
+        await validator.validate(address);
+        // 校验成功
+        console.log("校验成功");
+        // 调用接口, 保存地址
+        console.log(address);
+        // address 转成普通对象
+        const data = JSON.parse(JSON.stringify(address));
+        // 发送请求, 获取响应数据
+        const res = await post("/user/address", data);
+        // 判断错误码
+        if (res.errno === 0) {
+          // 创建地址成功
+          showToast("创建地址成功");
+          // 1秒之后跳转到地址列表页
+          setTimeout(() => {
+            // 跳转到地址列表页
+            router.push("/address-list");
+          }, 1000);
+        } else {
+          // 登录失败, 提示用户, res.msg是错误信息
+          showToast(res.msg);
+        }
+      } catch (errors) {
+        // 校验失败
+        showToast(errors.errors[0].message);
+      }
+    };
+    // 提交表单
+    const submitForm = () => {
+      // 校验表单
+      validateForm();
+    };
+    return {
+      backToAddressList,
+      address,
+      submitForm,
+      isShow,
+      toastMessage,
+    };
+  },
 };
 </script>
 <style lang="scss" scoped>
 @import "../../style/address-common.scss";
-.container {
-  width: 100vw;
-  height: 100vh;
-  background-color: #f8f8f8;
-  @import "../../style/head-common.scss";
-  .info {
-    margin-top: 3.2vw;
-    height: 59.7333vw;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    .gap {
-      width: 90.4vw;
-      height: 0.2667vw;
-      background: #f1f1f1;
-      margin: 0 auto;
-    }
-    .item {
-      padding-left: 4.8vw;
-      .text {
-        margin-right: 1vw;
-        font-size: 3.7333vw;
-        color: #666666;
-        line-height: 5.3333vw;
-      }
-      .input-item {
-        font-size: 3.7333vw;
-        color: #333333;
-        line-height: 5.3333vw;
-        &::placeholder {
-          font-size: 3.7333vw;
-          color: #999999;
-          line-height: 5.3333vw;
-        }
-      }
-    }
-  }
-}
 </style>
